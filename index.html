@@ -65,6 +65,19 @@
             width: calc(100% + 1.3px);
             height: 60px;
         }
+
+        .typewriter-cursor::after {
+            content: '|';
+            margin-left: 2px;
+            animation: typewriter-blink 0.85s step-start infinite;
+        }
+        .typewriter-cursor.is-done::after {
+            animation: none;
+            opacity: 0;
+        }
+        @keyframes typewriter-blink {
+            50% { opacity: 0; }
+        }
     </style>
 </head>
 <body class="font-body-md antialiased overflow-x-hidden">
@@ -102,10 +115,9 @@
             Licensed Texas Providers
         </div>
 <h1 class="font-display-lg text-display-lg text-deep-forest mb-6 md:text-display-lg text-headline-lg-mobile leading-tight">
-            Texas Telehealth Prescriptions, <span class="italic font-light text-primary/80">100% Online</span>
+            Texas Telehealth Prescriptions, <span class="italic font-light text-primary/80 typewriter-cursor" id="typewriter-headline" data-typewriter="100% Online"></span>
 </h1>
-<p class="font-body-lg text-body-lg text-secondary mb-8 max-w-md">
-            No Insurance Needed. Quality care, a simple process — all from the comfort of your home.
+<p class="font-body-lg text-body-lg text-secondary mb-8 max-w-md typewriter-cursor" id="typewriter-subtext" data-typewriter="No Insurance Needed. Quality care, a simple process — all from the comfort of your home.">
         </p>
 <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
 <a class="bg-deep-forest text-white font-label-lg text-label-lg uppercase px-8 py-4 rounded-full hover:bg-primary transition-all text-center tracking-wide shadow-ambient hover:shadow-ambient-hover transform hover:-translate-y-1" href="https://mygreencaphealth.practicebetter.io/#/692661e4b458e7d10af10a2b/forms?f=69d4ae45815b5d896fd5ef79">
@@ -745,5 +757,36 @@
 </div>
 </footer>
 
+<script>
+    (function () {
+        function typeInto(el, speed, onDone) {
+            var text = el.getAttribute('data-typewriter') || '';
+            var i = 0;
+            el.textContent = '';
+            (function step() {
+                if (i < text.length) {
+                    el.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(step, speed);
+                } else {
+                    el.classList.add('is-done');
+                    if (onDone) onDone();
+                }
+            })();
+        }
 
+        document.addEventListener('DOMContentLoaded', function () {
+            var headline = document.getElementById('typewriter-headline');
+            var subtext = document.getElementById('typewriter-subtext');
+            if (!headline) return;
+            typeInto(headline, 70, function () {
+                if (subtext) {
+                    setTimeout(function () {
+                        typeInto(subtext, 20);
+                    }, 250);
+                }
+            });
+        });
+    })();
+</script>
 </body></html>
