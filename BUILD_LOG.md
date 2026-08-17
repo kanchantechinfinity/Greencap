@@ -39,3 +39,15 @@ Per user's explicit choice (asked via clarifying question): rebuilt the hero as 
 - `dd701d3` — hero video replacing static image, text overlay in vial gap, later slimmed down per feedback (white panel removed, sizes reduced) — all folded into this single commit
 
 **Gotcha for next time:** the vials start touching (no visible gap) for the first ~1.5s of each loop and only fully separate by ~2s in; the overlay text will briefly sit across the vials early in each loop cycle. User was told this tradeoff and accepted it when choosing "full headline + subtext" over a shorter phrase.
+
+## 2026-08-17 — Hero overlay slimmed to headline-only, gated to video timing
+
+User asked to: shrink the overlay text further so it visibly sits between the vials, remove the subtext paragraph / CTA buttons / "Licensed Texas Providers" badge entirely, and only show the headline once the vials are side-by-side (not while still touching).
+
+**Changes (`0db6ef7`):**
+- Removed the badge, `#typewriter-subtext` paragraph, both CTA links, and the trust-icons row from the hero overlay. Only the `<h1>` (with the `#typewriter-headline` typed span) remains.
+- Headline sized with `style="font-size:clamp(0.55rem, 2.6vw, 1.4rem)"` and its wrapper `div#hero-headline-gate` set to `width:26%` — both inline styles, deliberately **not** new Tailwind utility classes, since [greencap_static_tailwind_css](../../../.claude/projects/-Users-apple-Desktop-go-high-level/memory/greencap_static_tailwind_css.md) means any unrecognized class silently no-ops. `clamp()`/percentage width need no breakpoint variants and scale continuously with the card's actual rendered width.
+- Video given `id="hero-video"`. JS listens to its `timeupdate` event and sets `#hero-headline-gate`'s inline `opacity` to `1` once `currentTime >= 1.8` (vials visibly separated) and `0` below that (still touching) — `SIDE_BY_SIDE_AT` constant in the script, easy to retune if the separation timing ever looks off.
+- Typewriter loop simplified to headline-only (type → hold 1.8s → erase → 0.4s pause → repeat); the subtext type/erase steps were removed since the element no longer exists.
+
+**Verified:** opacity toggles correctly on natural playback (checked via a 2s `timeupdate` listener sampling `currentTime`/`opacity` together — confirms real coupling, not just plausible-looking code). Manual `currentTime =` jumps in devtools don't reflect live in a screenshot taken moments later because the muted video keeps playing/looping in the background during the round-trip — expected, not a bug.
