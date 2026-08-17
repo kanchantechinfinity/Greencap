@@ -188,7 +188,7 @@
 </div>
 </section>
 <!-- Hero Section (Side Video) -->
-<section class="relative pt-16 pb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto flex flex-col md:flex-row items-center gap-gutter min-h-[80vh]">
+<section class="relative pt-16 pb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto flex flex-col md:flex-row gap-gutter min-h-[80vh]" style="align-items:stretch;">
 <div class="w-full md:w-1/2 flex flex-col items-start z-10">
 <div class="bg-sage-tint text-deep-forest font-label-md px-3 py-1 rounded-full mb-6 uppercase tracking-wider flex items-center gap-2 border border-primary-fixed">
 <span class="material-symbols-outlined filled-icon text-[16px]">verified</span>
@@ -213,9 +213,9 @@
 <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">verified_user</span> Prescription Strength</span>
 </div>
 </div>
-<div class="w-full md:w-1/2 relative mt-12 md:mt-0">
+<div class="w-full md:w-1/2 relative mt-12 md:mt-0" style="min-height:320px;">
 <div class="absolute inset-0 bg-sage-tint rounded-[40px] transform rotate-3 scale-105 opacity-50"></div>
-<video class="relative z-10 w-full h-auto object-cover rounded-[40px] shadow-ambient" autoplay muted loop playsinline preload="auto">
+<video id="hero-video-side" class="relative z-10 w-full h-full object-cover rounded-[40px] shadow-ambient" style="position:absolute;inset:0;" autoplay muted loop playsinline preload="auto">
 <source src="assets/hero-video-3.mp4" type="video/mp4">
 </video>
 <!-- Floating Badge -->
@@ -896,6 +896,14 @@
             }
             startHeadlineSubtextLoop('typewriter-headline-classic', 'typewriter-subtext-classic');
             startHeadlineSubtextLoop('typewriter-headline-side', 'typewriter-subtext-side');
+
+            var sideVideo = document.getElementById('hero-video-side');
+            if (sideVideo) {
+                sideVideo.playbackRate = 0.75;
+                sideVideo.addEventListener('loadedmetadata', function () {
+                    sideVideo.playbackRate = 0.75;
+                });
+            }
 
             // Video hero: headline fades in and grows continuously in step with
             // the vials moving apart, reaching full size right as they hit the
