@@ -69,11 +69,6 @@
         .hero-text-shadow {
             text-shadow: 0 2px 16px rgba(255,255,255,0.85), 0 1px 4px rgba(255,255,255,0.9);
         }
-        .hero-gap-btn {
-            font-size: clamp(0.4rem, 1.5vw, 0.7rem);
-            padding: clamp(0.25rem, 1vw, 0.55rem) clamp(0.5rem, 2vw, 1rem);
-            white-space: nowrap;
-        }
         .typewriter-cursor::after {
             content: '|';
             margin-left: 2px;
@@ -116,8 +111,8 @@
 </div>
 </nav>
 <!-- Hero Section (Classic) -->
-<section class="relative pt-16 pb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto flex flex-col md:flex-row items-center gap-gutter min-h-[80vh]">
-<div class="w-full md:w-1/2 flex flex-col items-start z-10">
+<section class="relative pt-16 pb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto flex flex-col md:flex-row gap-gutter min-h-[80vh]" style="align-items:stretch;">
+<div class="w-full md:w-1/2 flex flex-col items-start justify-center z-10">
 <div class="bg-sage-tint text-deep-forest font-label-md px-3 py-1 rounded-full mb-6 uppercase tracking-wider flex items-center gap-2 border border-primary-fixed">
 <span class="material-symbols-outlined filled-icon text-[16px]">verified</span>
             Licensed Texas Providers
@@ -141,42 +136,11 @@
 <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">verified_user</span> Prescription Strength</span>
 </div>
 </div>
-<div class="w-full md:w-1/2 relative mt-12 md:mt-0">
+<div class="w-full md:w-1/2 relative mt-12 md:mt-0" style="min-height:320px;">
 <div class="absolute inset-0 bg-sage-tint rounded-[40px] transform rotate-3 scale-105 opacity-50"></div>
-<img alt="Two happy Green Cap customers checking their phone" class="relative z-10 w-full h-auto object-cover rounded-[40px] shadow-ambient" src="assets/hero-classic.png">
+<img alt="Two happy Green Cap customers checking their phone" class="z-10 w-full h-full object-cover rounded-[40px] shadow-ambient" style="position:absolute;inset:0;" src="assets/hero-classic.png">
 <!-- Floating Badge -->
 <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-[2rem] shadow-ambient z-20 flex items-center gap-3 border border-warm-cream">
-<div class="bg-gold-accent/20 p-2 rounded-full text-gold-accent flex items-center justify-center">
-<span class="material-symbols-outlined filled-icon">star</span>
-</div>
-<div>
-<p class="font-label-md text-xs text-secondary uppercase tracking-wider">Trusted by</p>
-<p class="font-headline-md text-xl text-deep-forest m-0">2,400+ Texans</p>
-</div>
-</div>
-</div>
-</section>
-<!-- Hero Section (Video) -->
-<section class="relative pt-16 pb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
-<div class="relative rounded-[40px] overflow-hidden shadow-ambient">
-<video id="hero-video" class="w-full h-auto block" autoplay muted loop playsinline preload="auto">
-<source src="assets/hero-video-2.mp4" type="video/mp4">
-</video>
-<div class="absolute inset-0 flex items-center justify-center">
-<div class="flex flex-col items-center text-center" id="hero-headline-gate" style="width:32%;opacity:0;transform:scale(0.6);transform-origin:center;transition:opacity 0.15s ease-out, transform 0.15s ease-out;">
-<h1 class="font-display-lg text-deep-forest leading-tight hero-text-shadow" style="font-size:clamp(0.55rem, 2.6vw, 1.4rem);">
-            Texas Telehealth Prescriptions,<br>
-            <span class="italic font-light text-primary/80 typewriter-cursor" id="typewriter-headline-video" data-typewriter="100% Online"></span>
-</h1>
-<div class="flex flex-col gap-2 items-center w-full" style="margin-top:0.6em;">
-<a class="hero-gap-btn bg-deep-forest text-white uppercase rounded-full tracking-wide text-center" href="https://mygreencaphealth.practicebetter.io/#/692661e4b458e7d10af10a2b/forms?f=69d4ae45815b5d896fd5ef79">Start Free Assessment</a>
-<a class="hero-gap-btn bg-white bg-opacity-90 backdrop-blur-md border border-deep-forest text-deep-forest uppercase rounded-full tracking-wide flex items-center justify-center gap-1" href="tel:8326482801">
-<span class="material-symbols-outlined" style="font-size:1.1em;">call</span>(832) 648-2801
-            </a>
-</div>
-</div>
-</div>
-<div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-[2rem] shadow-ambient z-20 flex items-center gap-3 border border-warm-cream hidden md:flex">
 <div class="bg-gold-accent/20 p-2 rounded-full text-gold-accent flex items-center justify-center">
 <span class="material-symbols-outlined filled-icon">star</span>
 </div>
@@ -905,37 +869,6 @@
                 });
             }
 
-            // Video hero: headline fades in and grows continuously in step with
-            // the vials moving apart, reaching full size right as they hit the
-            // extreme corners at the end of each loop.
-            var videoHeadline = document.getElementById('typewriter-headline-video');
-            var gate = document.getElementById('hero-headline-gate');
-            var video = document.getElementById('hero-video');
-            if (videoHeadline && video && gate) {
-                var SEPARATION_START = 1.5;
-                var MIN_SCALE = 0.6;
-                var MAX_SCALE = 1.6;
-                var typedThisCycle = false;
-                video.addEventListener('timeupdate', function () {
-                    var end = video.duration || 5.04;
-                    var progress = (video.currentTime - SEPARATION_START) / (end - SEPARATION_START);
-                    progress = Math.max(0, Math.min(1, progress));
-
-                    if (progress > 0.02) {
-                        gate.style.opacity = '1';
-                        gate.style.transform = 'scale(' + (MIN_SCALE + (MAX_SCALE - MIN_SCALE) * progress).toFixed(3) + ')';
-                        if (!typedThisCycle) {
-                            typedThisCycle = true;
-                            typeText(videoHeadline, 70);
-                        }
-                    } else if (typedThisCycle) {
-                        typedThisCycle = false;
-                        gate.style.opacity = '0';
-                        gate.style.transform = 'scale(' + MIN_SCALE + ')';
-                        videoHeadline.textContent = '';
-                    }
-                });
-            }
         });
     })();
 </script>
