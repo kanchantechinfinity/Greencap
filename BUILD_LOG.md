@@ -51,3 +51,15 @@ User asked to: shrink the overlay text further so it visibly sits between the vi
 - Typewriter loop simplified to headline-only (type → hold 1.8s → erase → 0.4s pause → repeat); the subtext type/erase steps were removed since the element no longer exists.
 
 **Verified:** opacity toggles correctly on natural playback (checked via a 2s `timeupdate` listener sampling `currentTime`/`opacity` together — confirms real coupling, not just plausible-looking code). Manual `currentTime =` jumps in devtools don't reflect live in a screenshot taken moments later because the muted video keeps playing/looping in the background during the round-trip — expected, not a bug.
+
+## 2026-08-17 — Restored classic hero alongside the video hero for comparison (`aea8dd5`)
+
+User wants to see both hero designs live on the page before picking one to keep. Pulled the original two-column (badge/headline/subtext/CTAs/trust-icons + product image) hero markup back from commit `32960f4` (the last commit before it was replaced) and reinserted it as its own `<section>` directly above the video hero — video hero is now the second hero-like section, right before the Trust Bar.
+
+**ID collisions handled:** the restored classic section reuses the same typewriter pattern, so its elements were renamed to avoid clashing with the video hero's:
+- Classic: `#typewriter-headline-classic`, `#typewriter-subtext-classic`
+- Video: `#typewriter-headline-video` (was `#typewriter-headline`)
+
+Script's single `DOMContentLoaded` handler now runs two independent loops — classic (type headline → type subtext → hold → erase both → repeat) and video (type headline only → hold → erase → repeat, gated to `#hero-video`'s `timeupdate` as before). Each loop no-ops safely if its elements aren't found, so either section can be deleted later without touching the other's code.
+
+**Next step:** once the user picks one, delete the other section's markup and its corresponding loop block in the script (and drop `assets/hero-video.mp4` + the `hero-text-shadow`/`typewriter-cursor` CSS if the video hero is the one cut).
