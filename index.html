@@ -158,7 +158,7 @@
 <source src="assets/hero-video-2.mp4" type="video/mp4">
 </video>
 <div class="absolute inset-0 flex items-center justify-center">
-<div class="flex flex-col items-center text-center" id="hero-headline-gate" style="width:26%;opacity:0;transition:opacity 0.5s ease;">
+<div class="flex flex-col items-center text-center" id="hero-headline-gate" style="width:26%;opacity:0;transform:scale(0.6);transform-origin:center;transition:opacity 0.15s ease-out, transform 0.15s ease-out;">
 <h1 class="font-display-lg text-deep-forest leading-tight hero-text-shadow" style="font-size:clamp(0.55rem, 2.6vw, 1.4rem);">
             Texas Telehealth Prescriptions, <span class="italic font-light text-primary/80 typewriter-cursor" id="typewriter-headline-video" data-typewriter="100% Online"></span>
 </h1>
@@ -839,22 +839,33 @@
                 })();
             }
 
-            // Video hero: headline types out only during the final segment of each
-            // loop, once the vials have reached the extreme left/right corners.
+            // Video hero: headline fades in and grows continuously in step with
+            // the vials moving apart, reaching full size right as they hit the
+            // extreme corners at the end of each loop.
             var videoHeadline = document.getElementById('typewriter-headline-video');
             var gate = document.getElementById('hero-headline-gate');
             var video = document.getElementById('hero-video');
             if (videoHeadline && video && gate) {
-                var CORNERS_AT = 4.2;
+                var SEPARATION_START = 1.5;
+                var MIN_SCALE = 0.6;
+                var MAX_SCALE = 1.6;
                 var typedThisCycle = false;
                 video.addEventListener('timeupdate', function () {
-                    if (video.currentTime >= CORNERS_AT && !typedThisCycle) {
-                        typedThisCycle = true;
+                    var end = video.duration || 5.04;
+                    var progress = (video.currentTime - SEPARATION_START) / (end - SEPARATION_START);
+                    progress = Math.max(0, Math.min(1, progress));
+
+                    if (progress > 0.02) {
                         gate.style.opacity = '1';
-                        typeText(videoHeadline, 70);
-                    } else if (video.currentTime < CORNERS_AT && typedThisCycle) {
+                        gate.style.transform = 'scale(' + (MIN_SCALE + (MAX_SCALE - MIN_SCALE) * progress).toFixed(3) + ')';
+                        if (!typedThisCycle) {
+                            typedThisCycle = true;
+                            typeText(videoHeadline, 70);
+                        }
+                    } else if (typedThisCycle) {
                         typedThisCycle = false;
                         gate.style.opacity = '0';
+                        gate.style.transform = 'scale(' + MIN_SCALE + ')';
                         videoHeadline.textContent = '';
                     }
                 });
