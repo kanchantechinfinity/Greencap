@@ -69,6 +69,11 @@
         .hero-text-shadow {
             text-shadow: 0 2px 16px rgba(255,255,255,0.85), 0 1px 4px rgba(255,255,255,0.9);
         }
+        .hero-gap-btn {
+            font-size: clamp(0.4rem, 1.5vw, 0.7rem);
+            padding: clamp(0.25rem, 1vw, 0.55rem) clamp(0.5rem, 2vw, 1rem);
+            white-space: nowrap;
+        }
         .typewriter-cursor::after {
             content: '|';
             margin-left: 2px;
@@ -158,10 +163,17 @@
 <source src="assets/hero-video-2.mp4" type="video/mp4">
 </video>
 <div class="absolute inset-0 flex items-center justify-center">
-<div class="flex flex-col items-center text-center" id="hero-headline-gate" style="width:26%;opacity:0;transform:scale(0.6);transform-origin:center;transition:opacity 0.15s ease-out, transform 0.15s ease-out;">
+<div class="flex flex-col items-center text-center" id="hero-headline-gate" style="width:32%;opacity:0;transform:scale(0.6);transform-origin:center;transition:opacity 0.15s ease-out, transform 0.15s ease-out;">
 <h1 class="font-display-lg text-deep-forest leading-tight hero-text-shadow" style="font-size:clamp(0.55rem, 2.6vw, 1.4rem);">
-            Texas Telehealth Prescriptions, <span class="italic font-light text-primary/80 typewriter-cursor" id="typewriter-headline-video" data-typewriter="100% Online"></span>
+            Texas Telehealth Prescriptions,<br>
+            <span class="italic font-light text-primary/80 typewriter-cursor" id="typewriter-headline-video" data-typewriter="100% Online"></span>
 </h1>
+<div class="flex flex-col gap-2 items-center w-full" style="margin-top:0.6em;">
+<a class="hero-gap-btn bg-deep-forest text-white uppercase rounded-full tracking-wide text-center" href="https://mygreencaphealth.practicebetter.io/#/692661e4b458e7d10af10a2b/forms?f=69d4ae45815b5d896fd5ef79">Start Free Assessment</a>
+<a class="hero-gap-btn bg-white bg-opacity-90 backdrop-blur-md border border-deep-forest text-deep-forest uppercase rounded-full tracking-wide flex items-center justify-center gap-1" href="tel:8326482801">
+<span class="material-symbols-outlined" style="font-size:1.1em;">call</span>(832) 648-2801
+            </a>
+</div>
 </div>
 </div>
 <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-[2rem] shadow-ambient z-20 flex items-center gap-3 border border-warm-cream hidden md:flex">
