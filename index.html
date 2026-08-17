@@ -66,6 +66,9 @@
             height: 60px;
         }
 
+        .hero-text-shadow {
+            text-shadow: 0 2px 16px rgba(255,255,255,0.85), 0 1px 4px rgba(255,255,255,0.9);
+        }
         .typewriter-cursor::after {
             content: '|';
             margin-left: 2px;
@@ -108,36 +111,38 @@
 </div>
 </nav>
 <!-- Hero Section -->
-<section class="relative pt-16 pb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto flex flex-col md:flex-row items-center gap-gutter min-h-[80vh]">
-<div class="w-full md:w-1/2 flex flex-col items-start z-10">
-<div class="bg-sage-tint text-deep-forest font-label-md px-3 py-1 rounded-full mb-6 uppercase tracking-wider flex items-center gap-2 border border-primary-fixed">
+<section class="relative pt-16 pb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="relative rounded-[40px] overflow-hidden shadow-ambient">
+<video class="w-full h-auto block" autoplay muted loop playsinline preload="auto">
+<source src="assets/hero-video.mp4" type="video/mp4">
+</video>
+<div class="absolute inset-0 flex items-center justify-center px-6 md:px-16 py-8">
+<div class="w-full max-w-md flex flex-col items-center text-center">
+<div class="bg-sage-tint text-deep-forest font-label-md px-3 py-1 rounded-full mb-3 uppercase tracking-wider flex items-center gap-2 border border-primary-fixed hero-text-shadow">
 <span class="material-symbols-outlined filled-icon text-[16px]">verified</span>
             Licensed Texas Providers
         </div>
-<h1 class="font-display-lg text-display-lg text-deep-forest mb-6 md:text-display-lg text-headline-lg-mobile leading-tight">
+<h1 class="font-display-lg text-headline-lg text-deep-forest mb-3 leading-tight hero-text-shadow">
             Texas Telehealth Prescriptions, <span class="italic font-light text-primary/80 typewriter-cursor" id="typewriter-headline" data-typewriter="100% Online"></span>
 </h1>
-<p class="font-body-lg text-body-lg text-secondary mb-8 max-w-md typewriter-cursor" id="typewriter-subtext" data-typewriter="No Insurance Needed. Quality care, a simple process — all from the comfort of your home.">
+<p class="font-body-md text-body-md text-deep-forest mb-4 max-w-sm typewriter-cursor hero-text-shadow" id="typewriter-subtext" data-typewriter="No Insurance Needed. Quality care, a simple process — all from the comfort of your home.">
         </p>
-<div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-<a class="bg-deep-forest text-white font-label-lg text-label-lg uppercase px-8 py-4 rounded-full hover:bg-primary transition-all text-center tracking-wide shadow-ambient hover:shadow-ambient-hover transform hover:-translate-y-1" href="https://mygreencaphealth.practicebetter.io/#/692661e4b458e7d10af10a2b/forms?f=69d4ae45815b5d896fd5ef79">
+<div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+<a class="bg-deep-forest text-white font-label-lg text-label-lg uppercase px-6 py-3 rounded-full hover:bg-primary transition-all text-center tracking-wide shadow-ambient hover:shadow-ambient-hover transform hover:-translate-y-1" href="https://mygreencaphealth.practicebetter.io/#/692661e4b458e7d10af10a2b/forms?f=69d4ae45815b5d896fd5ef79">
                 Start Free Assessment
             </a>
-<a class="bg-transparent border border-deep-forest text-deep-forest font-label-lg text-label-lg uppercase px-8 py-4 rounded-full hover:bg-warm-cream transition-colors text-center tracking-wide flex items-center justify-center gap-2" href="tel:8326482801">
+<a class="bg-white/80 backdrop-blur-md border border-deep-forest text-deep-forest font-label-lg text-label-lg uppercase px-6 py-3 rounded-full hover:bg-warm-cream transition-colors text-center tracking-wide flex items-center justify-center gap-2" href="tel:8326482801">
 <span class="material-symbols-outlined">call</span> (832) 648-2801
             </a>
 </div>
-<div class="mt-8 flex flex-wrap items-center gap-6 text-sm font-label-md text-secondary uppercase tracking-widest opacity-80">
+<div class="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs font-label-md text-deep-forest uppercase tracking-widest hero-text-shadow">
 <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">science</span> Lab Tested</span>
 <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">local_shipping</span> Discreet Next Day</span>
 <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">verified_user</span> Prescription Strength</span>
 </div>
 </div>
-<div class="w-full md:w-1/2 relative mt-12 md:mt-0">
-<div class="absolute inset-0 bg-sage-tint rounded-[40px] transform rotate-3 scale-105 opacity-50"></div>
-<img alt="GLP-1 Weight Loss Injection" class="relative z-10 w-full h-auto object-cover rounded-[40px] shadow-ambient" src="https://lh3.googleusercontent.com/aida/AP1WRLtKkIwugjTy6u-4NnqIr6kxscp307EHLsnnMzMZ4xxQxFXWa4uEBwVSxIptdkR5ae3dYqVIDP6GtiiVXnFAC_avDw4XIHqFImZBxws4Y1T_NUoqoK7lZbQT7zGVcD4-XZqxIogdXCecerlZqDu5ilbtiMNwkK5ZMBIK6FiwSunVQ_qngEiCLaUExInImD8Jjf-6K4JTKUEy7QuZX6lInMd3P3A-PSaJwY035rIDdDcS2VyIHnOc1PSJKac9">
-<!-- Floating Badge -->
-<div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-[2rem] shadow-ambient z-20 flex items-center gap-3 border border-warm-cream">
+</div>
+<div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-[2rem] shadow-ambient z-20 flex items-center gap-3 border border-warm-cream hidden md:flex">
 <div class="bg-gold-accent/20 p-2 rounded-full text-gold-accent flex items-center justify-center">
 <span class="material-symbols-outlined filled-icon">star</span>
 </div>
