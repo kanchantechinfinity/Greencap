@@ -63,3 +63,15 @@ User wants to see both hero designs live on the page before picking one to keep.
 Script's single `DOMContentLoaded` handler now runs two independent loops — classic (type headline → type subtext → hold → erase both → repeat) and video (type headline only → hold → erase → repeat, gated to `#hero-video`'s `timeupdate` as before). Each loop no-ops safely if its elements aren't found, so either section can be deleted later without touching the other's code.
 
 **Next step:** once the user picks one, delete the other section's markup and its corresponding loop block in the script (and drop `assets/hero-video.mp4` + the `hero-text-shadow`/`typewriter-cursor` CSS if the video hero is the one cut).
+
+## 2026-08-17 — Swapped video hero clip; text now grows in sync with vial separation (`56ae659`, `b09e315`)
+
+User supplied a second video (`/Users/apple/Desktop/001.mp4`, 1920x1080, ~5.04s) where the vials start touching center and end up pushed to the extreme left/right corners of the frame — same idea as the first clip but a much bigger final gap. Copied to `assets/hero-video-2.mp4`, swapped into the video hero's `<source>` (first clip `assets/hero-video.mp4` left in place, unused, in case the user wants to revert).
+
+Inspected frames by seeking the `<video>` element and screenshotting (`currentTime` set via JS, `seeked` event awaited) rather than guessing timings: vials are still together through ~t=1.5s, mid-separation ~t=2–4s, essentially at their final corner position by ~t=4.2–4.3s, loop duration ~5.04s.
+
+Two iterations on the reveal logic, both driven by `#hero-video`'s `timeupdate` (no `setTimeout`-based loop — everything is a function of `video.currentTime`, so it self-corrects every frame instead of drifting out of sync with the video like an independent timer would):
+1. First pass (`56ae659`): binary gate — hidden/empty until `currentTime >= 4.2` (`CORNERS_AT`), then type once; reset when time wraps back below that on the next loop.
+2. User asked (in Hinglish: *"jaise bottle dhur hote hai extreme end pe, wise text bade hote jane chahiye, smooth finish ke liye"* — "as the bottles move to the extreme ends, the text should grow bigger too, for a smooth finish") for continuous growth, not a sudden appearance. Replaced the binary gate (`b09e315`) with a progress ratio: `progress = clamp((currentTime - 1.5) / (duration - 1.5), 0, 1)`, driving `transform: scale()` from `0.6` to `1.6` every `timeupdate` tick, plus a short `0.15s` CSS transition to smooth between ticks. Typing still triggers once per cycle (`typedThisCycle` flag) right as `progress` first exceeds `0.02`, so the reveal is: fade/scale in small partway through separation → keeps growing → hits max size (1.6x) exactly as vials reach the corners → resets to hidden/`scale(0.6)` when the loop wraps.
+
+Verified by sampling `{currentTime, opacity, transform}` on a 400ms interval across a full loop — confirms monotonic scale growth (0.6 → ~1.6) synced to the video's own clock, not a fixed-duration animation that could drift.
