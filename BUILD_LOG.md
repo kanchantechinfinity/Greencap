@@ -107,3 +107,9 @@ User flagged (via screenshot) that the side-video hero's video was shorter than 
 - Added `id="hero-video-side"`; script sets `playbackRate = 0.75` on load for a slight slow-motion feel, without changing pitch/audio (video is muted anyway).
 
 Verified with `getBoundingClientRect()` on both columns at 1280px width: text column and video column both measure exactly 536px tall — confirms the stretch is real, not just visually close.
+
+## 2026-08-17 — Classic hero: swapped in supplied lifestyle photo (`96642a5`)
+
+User attached an image (two women laughing at a phone, cream background) and asked to use it in "the first section very first hero section." The attachment wasn't a file path — found it by checking `ls -lat ~/Desktop/` for the most recently modified file, which turned out to be `GREEN CAP CREATIVES_21.png` (modified seconds before the message arrived); read it back to visually confirm it matched what was attached before using it.
+
+Copied to `assets/hero-classic.png`, swapped into the classic hero's `<img src>` at index.html:146 only — left the *second* occurrence of the old Google-hosted vial-image URL (a different, unrelated product card further down the page, ~line 497) untouched, since the request was scoped to "the first hero section."
