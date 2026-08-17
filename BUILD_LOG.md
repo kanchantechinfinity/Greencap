@@ -96,3 +96,14 @@ User had asked earlier to make the classic hero use its product image as a secti
 **New section:** third hero (`<!-- Hero Section (Side Video) -->`) is a straight duplicate of the classic hero's two-column markup, video (`assets/hero-video-3.mp4`, 1920x1080, ~5.06s) swapping in for the `<img>` in the right column, `autoplay muted loop playsinline` like the other hero video. IDs renamed to `-side` suffix (`typewriter-headline-side`, `typewriter-subtext-side`) to avoid collisions. The classic hero's headline+subtext loop was factored into a shared `startHeadlineSubtextLoop(headlineId, subtextId)` function so both the classic and side sections reuse the same loop code instead of duplicating it a third time.
 
 Verified `assets/hero-video-3.mp4` plays correctly in isolation (own test page, `readyState:4`) — it only fails to reach `readyState:4` when loaded as the *second* autoplay video on the full page in this sandboxed preview browser, which is a concurrency quirk of the preview tool itself (real browsers handle multiple autoplay-muted videos fine); not expected to be an issue on the actual deployed GitHub Pages site.
+
+## 2026-08-17 — Side-video hero: match column height, slow playback (`62f3910`)
+
+User flagged (via screenshot) that the side-video hero's video was shorter than the text column beside it and asked for the video to fill the same height, plus a slight slowdown.
+
+- Section row's `align-items` changed from `center` (the `items-center` utility) to `stretch` via inline `style="align-items:stretch;"` — **not** a Tailwind `items-stretch` class, since that utility doesn't exist in the compiled stylesheet (only `.items-start`/`.items-center` are compiled; see [greencap_static_tailwind_css](../../../.claude/projects/-Users-apple-Desktop-go-high-level/memory/greencap_static_tailwind_css.md) — checked with `grep -o '\.items-[a-z]*{[^}]*}'` before using it, would have silently no-opped otherwise).
+- Video column div gets `min-height:320px` (mobile fallback, since it's `flex-col` below `md` and the video is now absolutely positioned so it no longer contributes intrinsic height to the column).
+- Video itself switched from `w-full h-auto` to `position:absolute;inset:0` + `w-full h-full object-cover` — fills whatever height the flex-stretch (desktop) or `min-height` (mobile) gives its parent, cropping via `object-cover` instead of preserving native aspect ratio.
+- Added `id="hero-video-side"`; script sets `playbackRate = 0.75` on load for a slight slow-motion feel, without changing pitch/audio (video is muted anyway).
+
+Verified with `getBoundingClientRect()` on both columns at 1280px width: text column and video column both measure exactly 536px tall — confirms the stretch is real, not just visually close.
