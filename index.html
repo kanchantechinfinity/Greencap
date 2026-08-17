@@ -113,33 +113,14 @@
 <!-- Hero Section -->
 <section class="relative pt-16 pb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
 <div class="relative rounded-[40px] overflow-hidden shadow-ambient">
-<video class="w-full h-auto block" autoplay muted loop playsinline preload="auto">
+<video id="hero-video" class="w-full h-auto block" autoplay muted loop playsinline preload="auto">
 <source src="assets/hero-video.mp4" type="video/mp4">
 </video>
-<div class="absolute inset-0 flex items-center justify-center px-6 md:px-16 py-8">
-<div class="w-full max-w-md flex flex-col items-center text-center">
-<div class="bg-sage-tint text-deep-forest font-label-md px-3 py-1 rounded-full mb-3 uppercase tracking-wider flex items-center gap-2 border border-primary-fixed hero-text-shadow">
-<span class="material-symbols-outlined filled-icon text-[16px]">verified</span>
-            Licensed Texas Providers
-        </div>
-<h1 class="font-display-lg text-headline-lg text-deep-forest mb-3 leading-tight hero-text-shadow">
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="flex flex-col items-center text-center" id="hero-headline-gate" style="width:26%;opacity:0;transition:opacity 0.5s ease;">
+<h1 class="font-display-lg text-deep-forest leading-tight hero-text-shadow" style="font-size:clamp(0.55rem, 2.6vw, 1.4rem);">
             Texas Telehealth Prescriptions, <span class="italic font-light text-primary/80 typewriter-cursor" id="typewriter-headline" data-typewriter="100% Online"></span>
 </h1>
-<p class="font-body-md text-body-md text-deep-forest mb-4 max-w-sm typewriter-cursor hero-text-shadow" id="typewriter-subtext" data-typewriter="No Insurance Needed. Quality care, a simple process — all from the comfort of your home.">
-        </p>
-<div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-<a class="bg-deep-forest text-white font-label-lg text-label-lg uppercase px-6 py-3 rounded-full hover:bg-primary transition-all text-center tracking-wide shadow-ambient hover:shadow-ambient-hover transform hover:-translate-y-1" href="https://mygreencaphealth.practicebetter.io/#/692661e4b458e7d10af10a2b/forms?f=69d4ae45815b5d896fd5ef79">
-                Start Free Assessment
-            </a>
-<a class="bg-white/80 backdrop-blur-md border border-deep-forest text-deep-forest font-label-lg text-label-lg uppercase px-6 py-3 rounded-full hover:bg-warm-cream transition-colors text-center tracking-wide flex items-center justify-center gap-2" href="tel:8326482801">
-<span class="material-symbols-outlined">call</span> (832) 648-2801
-            </a>
-</div>
-<div class="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs font-label-md text-deep-forest uppercase tracking-widest hero-text-shadow">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">science</span> Lab Tested</span>
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">local_shipping</span> Discreet Next Day</span>
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">verified_user</span> Prescription Strength</span>
-</div>
 </div>
 </div>
 <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-[2rem] shadow-ambient z-20 flex items-center gap-3 border border-warm-cream hidden md:flex">
@@ -801,16 +782,21 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             var headline = document.getElementById('typewriter-headline');
-            var subtext = document.getElementById('typewriter-subtext');
-            if (!headline || !subtext) return;
+            var gate = document.getElementById('hero-headline-gate');
+            var video = document.getElementById('hero-video');
+            if (!headline) return;
+
+            var SIDE_BY_SIDE_AT = 1.8;
+            if (video && gate) {
+                video.addEventListener('timeupdate', function () {
+                    gate.style.opacity = video.currentTime >= SIDE_BY_SIDE_AT ? '1' : '0';
+                });
+            }
 
             (async function loop() {
                 while (true) {
                     await typeText(headline, 70);
-                    await sleep(250);
-                    await typeText(subtext, 20);
                     await sleep(1800);
-                    await eraseText(subtext, 15);
                     await eraseText(headline, 40);
                     await sleep(400);
                 }
