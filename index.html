@@ -841,11 +841,38 @@
         }
 
         document.addEventListener('DOMContentLoaded', function () {
+            // Reserve the text column's fully-typed height up front so the column
+            // (and the stretched image/video beside it) never resizes as the
+            // typewriter types or erases — measured against the full text, then
+            // locked in as a min-height on the column.
+            function lockTextColumnHeight(headline, subtext) {
+                var col = headline.closest('h1').parentElement;
+                var prevHeadline = headline.textContent;
+                var prevSubtext = subtext.textContent;
+                col.style.minHeight = '';
+                headline.textContent = headline.getAttribute('data-typewriter') || '';
+                subtext.textContent = subtext.getAttribute('data-typewriter') || '';
+                var h = col.getBoundingClientRect().height;
+                col.style.minHeight = h + 'px';
+                headline.textContent = prevHeadline;
+                subtext.textContent = prevSubtext;
+            }
+
             // Headline + subtext loop together (used by classic image hero and side video hero)
             function startHeadlineSubtextLoop(headlineId, subtextId) {
                 var headline = document.getElementById(headlineId);
                 var subtext = document.getElementById(subtextId);
                 if (!headline || !subtext) return;
+
+                if (document.fonts && document.fonts.ready) {
+                    document.fonts.ready.then(function () { lockTextColumnHeight(headline, subtext); });
+                } else {
+                    lockTextColumnHeight(headline, subtext);
+                }
+                window.addEventListener('resize', function () {
+                    lockTextColumnHeight(headline, subtext);
+                });
+
                 (async function loop() {
                     while (true) {
                         await typeText(headline, 70);
