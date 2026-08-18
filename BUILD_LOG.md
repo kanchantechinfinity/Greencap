@@ -168,3 +168,9 @@ User pushed back hard ("NO ITS BECOMING TOO MUCH CHAOS") on the one-line grid fi
 - Kept the `.features-banner` grid wrapper (2/3/5 responsive columns) from the previous fix — still the right layout, just each grid cell is now a flip card instead of an inline icon+text row.
 
 Verified via hover (screenshot: front cards flip to reveal white back face with label + description) and via a scripted `.click()` + `classList.contains('is-flipped')` check for the tap path.
+
+## 2026-08-17 — Flip cards: shrunk size, bigger icon, fixed a width-collapse bug (`204d345`)
+
+User: cards too big, shrink them, make the icon bigger. Changed `.flip-card` from `height:180px` (no width cap) to `height:110px; max-width:140px`, and `.flip-card-icon` from `40px` to `52px` (bigger icon on a smaller card — same direction as the earlier hero text-shrink asks, just inverted for the icon).
+
+**Bug caught by measurement, not assumption:** first attempt added `max-width:140px; margin:0 auto;` without an explicit `width`. Screenshot showed the cards vanish entirely (just bare icons floating with no colored background). `getBoundingClientRect()` on `.flip-card` showed `width:0` — auto margins on a grid item disable the grid's default `justify-self:stretch` and fall back to shrink-to-fit sizing, and since `.flip-card-front`/`.flip-card-back` are `position:absolute` (contributing zero intrinsic width to the parent), shrink-to-fit computed to exactly 0. Fixed by adding `width:100%` alongside the `max-width`+`margin:auto`, which keeps the box from being treated as auto-width in the first place — re-verified `getBoundingClientRect()` showed `width:140,height:110` before taking the confirming screenshot.
