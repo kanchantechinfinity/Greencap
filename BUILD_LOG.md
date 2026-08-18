@@ -156,3 +156,15 @@ Three small fixes from a screenshot of the 4-card step section:
 **Scroll-reveal animation:** user asked (after a short exploratory back-and-forth on scope/tradeoffs) for animation across the whole site. Implemented as a `.scroll-reveal`/`.is-visible` CSS pair (opacity + `translateY(24px)→0`, 0.6s, respects `prefers-reduced-motion`) plus a single `IntersectionObserver` in a new `<script>` block that runs on `DOMContentLoaded`, adds `.scroll-reveal` to every `<section>` **except the first** (the hero — already animated via its own typewriter effect and visible immediately on load, so gating it behind scroll-reveal risked a flash-of-invisible-content), and un-observes each section once it's revealed (one-time reveal, not re-hidden on scroll-up). Deliberately JS-driven rather than hand-adding a class to every section in the markup — zero risk of missing a section or fighting existing classes, and trivially reversible (delete the one script block).
 
 Verified live: `document.querySelectorAll('.scroll-reveal.is-visible').length` matched the sections already in/above the viewport at test scroll position, and the hero section correctly has neither class.
+
+## 2026-08-17 — Features banner redone as flip cards (`a374497`)
+
+User pushed back hard ("NO ITS BECOMING TOO MUCH CHAOS") on the one-line grid fix from the previous entry — too cluttered with icon+label+sub-label crammed into 5 narrow columns. Asked instead for flip cards: icon-only front, full content on the back, revealed on hover, front face in the site's green.
+
+- Each of the 5 items is now a `.flip-card` > `.flip-card-inner` > `.flip-card-front` / `.flip-card-back` pair using a standard CSS 3D-flip (`perspective` + `transform-style: preserve-3d` + `backface-visibility: hidden` + `rotateY(180deg)` on hover) — hand-written in the custom `<style>` block since there's no Tailwind utility for 3D transforms in this stack at all (not a "missing from the compiled sheet" case this time, just not something Tailwind ships).
+- Front face uses the existing `bg-deep-forest` / `text-white` utility classes (the site's brand green) rather than a new hardcoded color, so it stays in sync with every other green element on the page automatically.
+- Added a `click` handler (new tiny script block) that toggles an `.is-flipped` class, so the flip also works via tap on touch devices that don't have a real `:hover` state — CSS rule is `.flip-card:hover .flip-card-inner, .flip-card.is-flipped .flip-card-inner { transform: rotateY(180deg); }`.
+- `prefers-reduced-motion: reduce` disables the flip transition (snaps instantly) same as the scroll-reveal animation.
+- Kept the `.features-banner` grid wrapper (2/3/5 responsive columns) from the previous fix — still the right layout, just each grid cell is now a flip card instead of an inline icon+text row.
+
+Verified via hover (screenshot: front cards flip to reveal white back face with label + description) and via a scripted `.click()` + `classList.contains('is-flipped')` check for the tap path.
