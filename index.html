@@ -82,7 +82,10 @@
             .features-banner { grid-template-columns: repeat(5, minmax(0, 1fr)); }
         }
         .flip-card {
-            height: 180px;
+            width: 100%;
+            height: 110px;
+            max-width: 140px;
+            margin: 0 auto;
             perspective: 1000px;
             cursor: pointer;
         }
@@ -102,16 +105,16 @@
             position: absolute;
             inset: 0;
             backface-visibility: hidden;
-            border-radius: 24px;
+            border-radius: 18px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 1rem;
+            padding: 0.5rem;
         }
         .flip-card-icon {
-            font-size: 40px;
+            font-size: 52px;
         }
         .flip-card-back {
             background: #fff;
@@ -119,11 +122,11 @@
             transform: rotateY(180deg);
         }
         .flip-card-back strong {
-            font-size: 0.8rem;
-            margin-bottom: 0.35rem;
+            font-size: 0.7rem;
+            margin-bottom: 0.25rem;
         }
         .flip-card-back span {
-            font-size: 0.75rem;
+            font-size: 0.65rem;
         }
         @media (prefers-reduced-motion: reduce) {
             .flip-card-inner { transition: none; }
