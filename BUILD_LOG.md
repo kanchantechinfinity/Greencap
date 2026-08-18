@@ -192,3 +192,9 @@ Turns out the very first "fit all 5 in one line" grid fix (from a few entries ba
 - Deleted the now-fully-unused `.features-banner` grid CSS (3 rules across 2 breakpoints) — no more references to the class anywhere in the file.
 
 This is the third pass on this one section this session (wrap → forced-one-line grid → flip cards → back to wrap-with-centering) — see the incremental-changes memory above; should have offered the "just center the wrapped one" option before jumping to a full layout change the first time.
+
+## 2026-08-17 — Fixed jagged bottom wave in Trust Bar section (`c2c03ed`)
+
+User flagged the bottom decorative SVG wave (below the "No Insurance Needed / Lab Tested / ..." row) as not smooth like the top one, from a screenshot showing what looked like a notch/discontinuity partway across. Compared the two paths (`.wave-top`/`.wave-bottom` in the Trust Bar section, index.html:172 and :199) directly: the shared right-hand curve segment was identical, but the hand-authored left-hand curve had different bezier control points between top and bottom (`C75.29,31.7,149.33,56.44,...` vs `C75.29,88.3,149.33,63.56,...`) — asymmetric by construction, not a rendering bug, but visually it can read as "less smooth" than the top depending on viewport width.
+
+Rather than hand-tuning new control points (risking the same asymmetry mistake again), made the bottom wave a guaranteed mirror of the top: reused the exact top path `d` string and added `style="transform: scaleY(-1);"` to the bottom `<svg>` itself (not the `.wave-bottom` container div, which already carries its own `translateY(99%)` positioning transform — flipping the inner `<svg>` keeps that positioning untouched). This is the only wave-top/wave-bottom pair on the site (`grep` confirmed — 2 divs total, one section), so no other instances needed the same fix.
