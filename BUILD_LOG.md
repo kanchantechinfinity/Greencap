@@ -135,3 +135,9 @@ Two bugs caught and fixed while verifying with a `setInterval` sampler rather th
 2. **Web-font race.** Measuring immediately on `DOMContentLoaded` sometimes ran before the custom fonts (Libre Caslon Text / Hanken Grotesk) finished loading, so the measurement used fallback-font metrics and wrapped to fewer lines than the real font would — locking in a height that was too short, which then visibly grew once the real font swapped in. Fixed by measuring inside `document.fonts.ready.then(...)` instead of synchronously.
 
 Verified with a 300ms-interval sampler logging `{textColH, imgColH, subtextLength}` across a full type→erase cycle at both ~674px and 1280px widths: `textColH` and `imgColH` both stay pinned at a single constant value (e.g. 536px/536px at 1280px) for every sample, confirming the fix rather than assuming it from the code.
+
+## 2026-08-17 — Removed the side-video hero section (`5f77c11`)
+
+User asked to remove the remaining extra hero section (the two-column layout with the vials video, added earlier this session as "copy the first hero as-is with video instead of the image"). Only the classic (lifestyle-photo) hero remains now.
+
+Deleted the `<!-- Hero Section (Side Video) -->` block (`sed -i '' '154,196d'`), its `startHeadlineSubtextLoop('typewriter-headline-side', ...)` call, and the `sideVideo`/`playbackRate` block in the script; `git rm`'d the now-unused `assets/hero-video-3.mp4`. Confirmed with `grep` that no `-side` id or `hero-video-side` reference remains anywhere in the file. Site now has a single hero section.
