@@ -69,18 +69,6 @@
         .hero-text-shadow {
             text-shadow: 0 2px 16px rgba(255,255,255,0.85), 0 1px 4px rgba(255,255,255,0.9);
         }
-        .features-banner {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 1.5rem;
-            align-items: center;
-        }
-        @media (min-width: 768px) {
-            .features-banner { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        }
-        @media (min-width: 1024px) {
-            .features-banner { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-        }
         .scroll-reveal {
             opacity: 0;
             transform: translateY(24px);
@@ -493,7 +481,7 @@
 </div>
 </div>
 <!-- Features Banner -->
-<div class="mt-16 bg-sage-tint/30 rounded-[40px] p-6 md:p-8 border border-sage-tint text-sm features-banner">
+<div class="mt-16 bg-sage-tint/30 rounded-[40px] p-6 md:p-8 flex flex-wrap justify-between items-center gap-6 border border-sage-tint text-sm">
 <div class="flex items-center gap-3">
 <span class="material-symbols-outlined text-deep-forest">lock</span>
 <div>
@@ -522,7 +510,7 @@
 <span class="font-body-md text-secondary">Doctors, NPs &amp; pharmacists</span>
 </div>
 </div>
-<div class="flex items-center gap-3">
+<div class="flex items-center gap-3" style="margin: 0 auto;">
 <span class="material-symbols-outlined text-deep-forest">science</span>
 <div>
 <strong class="font-label-md text-deep-forest block uppercase">FDA-Approved Ingredients</strong>
