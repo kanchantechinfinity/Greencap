@@ -181,4 +181,14 @@ User: "ITS LOOKING UGLY KEEP THAT SECTION LIKE BEFORE ONLY JUST 5 ONE PLACE IN M
 
 Removed all now-dead code from the flip-card experiment: the `.flip-card*` CSS rules (~50 lines) and the click-to-flip `<script>` block. Nothing flip-card-related remains in the file — this reverts the *design*, not just papers over it with new CSS on top.
 
-**Pattern worth naming:** this is the second design direction in a row the user reverted after seeing it live (the classic-hero-as-background change earlier, and now flip cards) — both times because "chaos"/"ugly" only became obvious once rendered, not from the description. Default to smaller, incremental visual changes rather than big redesigns when the ask is vague ("add more animation", a card treatment) — ship the smallest version first and let the user react before elaborating.
+**Pattern worth naming:** this is the second design direction in a row the user reverted after seeing it live (the classic-hero-as-background change earlier, and now flip cards) — both times because "chaos"/"ugly" only became obvious once rendered, not from the description. Default to smaller, incremental visual changes rather than big redesigns when the ask is vague ("add more animation", a card treatment) — ship the smallest version first and let the user react before elaborating. Saved as a durable memory (`greencap_incremental_visual_changes`) since it's now a repeated pattern for this project, not a one-off.
+
+## 2026-08-17 — Features banner: reverted the one-row fix too, centered the wrapped item instead (`692bfb9`)
+
+Turns out the very first "fit all 5 in one line" grid fix (from a few entries back) was also unwanted — user (in Hinglish: *"isse bhi pehle wala jab 5th wala neeche tha, sirf woh center me lao"* — "go back to before this too, when the 5th one was below, just bring that one to center") wanted the **original** wrapping flex layout back (4 items edge-to-edge on row one via `justify-between`, 5th wraps to its own row), just with that lone wrapped item centered instead of stuck at the left edge.
+
+- Container reverted from the `.features-banner` CSS-grid class back to the original `flex flex-wrap justify-between items-center gap-6` (byte-identical to the pre-session markup).
+- The 5th item alone gets `style="margin: 0 auto;"` — the standard flexbox trick for centering a single leftover item on its own wrapped line: `justify-content` already governs the *other* row (4 items, untouched), and auto margins on just this one child absorb the remaining space on *its* row without needing any container-level property that would also affect row one.
+- Deleted the now-fully-unused `.features-banner` grid CSS (3 rules across 2 breakpoints) — no more references to the class anywhere in the file.
+
+This is the third pass on this one section this session (wrap → forced-one-line grid → flip cards → back to wrap-with-centering) — see the incremental-changes memory above; should have offered the "just center the wrapped one" option before jumping to a full layout change the first time.
