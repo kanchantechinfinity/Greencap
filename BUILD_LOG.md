@@ -141,3 +141,10 @@ Verified with a 300ms-interval sampler logging `{textColH, imgColH, subtextLengt
 User asked to remove the remaining extra hero section (the two-column layout with the vials video, added earlier this session as "copy the first hero as-is with video instead of the image"). Only the classic (lifestyle-photo) hero remains now.
 
 Deleted the `<!-- Hero Section (Side Video) -->` block (`sed -i '' '154,196d'`), its `startHeadlineSubtextLoop('typewriter-headline-side', ...)` call, and the `sideVideo`/`playbackRate` block in the script; `git rm`'d the now-unused `assets/hero-video-3.mp4`. Confirmed with `grep` that no `-side` id or `hero-video-side` reference remains anywhere in the file. Site now has a single hero section.
+
+## 2026-08-17 — "How It Works" step cards cleanup (`8988273`)
+
+Three small fixes from a screenshot of the 4-card step section:
+- Removed the large decorative background numerals (`<div class="absolute -top-6 -left-6 text-8xl ... opacity-50">01</div>` etc.) from all four cards, not just the two the user explicitly named — same decorative element repeated, no reason to leave 03/04 behind.
+- Card 4 ("Track Your Progress"): the closing sentence "Our support team is always available by text or phone." was its own `<p>` in `text-deep-forest`, inconsistent with the rest of the card's body copy (`text-secondary`). Merged it into the main paragraph so it inherits the same `font-body-md text-secondary` styling as every other card's description text.
+- The phone number was plain text with a 📞 emoji under that sentence. Replaced with a pill matching the `bg-surface-container ... rounded-full` tag style used for "Delivery or Pickup" etc. elsewhere in the same section, swapping the emoji for the `call` Material Symbol icon to match the other pills' icon+label pattern exactly.
