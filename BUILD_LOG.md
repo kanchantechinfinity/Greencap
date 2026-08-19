@@ -198,3 +198,25 @@ This is the third pass on this one section this session (wrap → forced-one-lin
 User flagged the bottom decorative SVG wave (below the "No Insurance Needed / Lab Tested / ..." row) as not smooth like the top one, from a screenshot showing what looked like a notch/discontinuity partway across. Compared the two paths (`.wave-top`/`.wave-bottom` in the Trust Bar section, index.html:172 and :199) directly: the shared right-hand curve segment was identical, but the hand-authored left-hand curve had different bezier control points between top and bottom (`C75.29,31.7,149.33,56.44,...` vs `C75.29,88.3,149.33,63.56,...`) — asymmetric by construction, not a rendering bug, but visually it can read as "less smooth" than the top depending on viewport width.
 
 Rather than hand-tuning new control points (risking the same asymmetry mistake again), made the bottom wave a guaranteed mirror of the top: reused the exact top path `d` string and added `style="transform: scaleY(-1);"` to the bottom `<svg>` itself (not the `.wave-bottom` container div, which already carries its own `translateY(99%)` positioning transform — flipping the inner `<svg>` keeps that positioning untouched). This is the only wave-top/wave-bottom pair on the site (`grep` confirmed — 2 divs total, one section), so no other instances needed the same fix.
+
+## 2026-08-19 — Fixed site-wide broken images (`caa5361`)
+
+User reported no images showing anywhere on the site. Diagnosed by testing one of the `<img>` `src` values directly: nearly every image (logo ×2, 4 treatment-category images, 5 product images, LegitScript badge — 11 `<img>` tags total) pointed at `https://lh3.googleusercontent.com/aida/...` URLs, which are **temporary signed URLs from an AI image-generation tool**, not permanent hosting. `curl -I` on one returned `403 Forbidden` — the tokens had expired/been revoked. This explains why literally every image but `hero-classic.png` (uploaded directly into the repo earlier this session) was broken, for every visitor, not just the user.
+
+**Fix:** user pointed at `https://greencaphealth.com/` (the real production WordPress site for the same brand) as the source of truth. Used the Browser tool to load that site and read `document.querySelectorAll('img')` (a plain `curl` of the URL returned only an 89-line SPA shell — images are client-rendered, not in the raw HTML) to get real WordPress media-library URLs with descriptive filenames, then matched each to the broken image by its `alt` text:
+
+| Broken `alt` | Source (greencaphealth.com upload) | Saved as |
+|---|---|---|
+| Green Cap Health Logo | `Green-Cap-Logo-600x150.png` (picked from `srcset`, not the 2560w original) | `assets/logo.png` |
+| Weight Loss / Skin / Hair Regrowth / Great Sex | `Learn-about-{weight-loss-medication,skincare-prescriptions,hair-regrowth,sexual-wellness-prescriptions}.png` | `assets/category-*.png` |
+| GLP-1 Weight Loss Injection | `GLP-1-GIP-Weight-Loss-Injection-by-Green-Cap-online-prescriptions.png` | `assets/product-glp1-injection.png` |
+| 3-in-1 Hair Growth Capsules | `3-in-1-Hair-growth-capsules-with-finasteride-minoxidil-and-biotin.jpg` | `assets/product-hair-capsules.jpg` |
+| AgeDefy Radiance Repair Cream | `AgeDefy-radiance-repair-cream-for-anti-aging.png` | `assets/product-agedefy-cream.png` |
+| Sildenafil Tablets | `Sildenafil-generic-for-Viagra-online-prescription.png` | `assets/product-sildenafil.png` |
+| LegitScript | found by searching the page HTML for "legitscript" (not in the plain `<img>` list — it's wrapped in a link) → `unnamed.png` (full res, not the `-277x300` thumbnail) | `assets/legitscript-badge.png` |
+
+Downloaded all 10 with `curl -sL -A "Mozilla/5.0"` (WordPress can block non-browser user agents) directly into `assets/`, verified every one with `file` (real PNG/JPEG data, correct dimensions — not an HTML error page saved with an image extension) before touching any markup. Used a small Python script to swap all 11 `src` values (matching by the unique token in each broken URL, since the URLs are too long/similar to `sed` reliably) rather than 11 manual `Edit` calls — safer for this many near-identical replacements, verified afterward with `grep -c "lh3.googleusercontent" index.html` → `0`.
+
+**Verified against the live deployment, not just locally** (the in-session browser preview tool renders this file as a static/`data:` snapshot for reasons unclear — a tool quirk unrelated to the fix, so it wasn't trustworthy for this check): after confirming the Pages build for this commit finished (`status: built`), `curl`'d all 10 asset URLs directly against `kanchantechinfinity.github.io/Greencap/assets/*` (all `200`) and grepped the live HTML for `lh3.googleusercontent` (`0` matches).
+
+**Takeaway for next time:** never wire a live site's images to an AI tool's session-scoped image URLs (`lh3.googleusercontent.com/aida/...` and similar) — they're not meant for permanent hosting and will eventually 403. Any future image added to this site should be downloaded and committed into `assets/`, the same as every fix in this entry.
